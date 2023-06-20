@@ -36,7 +36,6 @@ nbc_extract_rules = {
     }
 }
 
-
 cnn_headlines = []
 nbc_headlines = []
 yahoo_headlines = []
