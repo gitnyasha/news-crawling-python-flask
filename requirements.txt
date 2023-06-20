@@ -1,3 +1,0 @@
-Flask
-APScheduler==3.3.1
-scrapingbee
