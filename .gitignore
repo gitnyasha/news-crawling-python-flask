@@ -1,2 +1,2 @@
-./newsenv
-./__pycache__
+newsvenv/
+__pycache__/
