@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>News Headlines</title>
+  </head>
+  <body>
+    <h1>News Headlines</h1>
+    <p>Last Updated: {{ timestamp }}</p>
+
+    <h2>CNN</h2>
+    <ul>
+      {% for headline in cnn_headlines %}
+      <li>{{ headline }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>NBC</h2>
+    <ul>
+      {% for headline in nbc_headlines %}
+      <li>{{ headline }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Yahoo</h2>
+    <ul>
+      {% for headline in yahoo_headlines %}
+      <li>{{ headline }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
