@@ -8,7 +8,7 @@ from pytz import utc
 app = Flask(__name__)
 scheduler = BackgroundScheduler(timezone=utc)
 
-client = ScrapingBeeClient(api_key='YOUR_API_KEY')
+client = ScrapingBeeClient(api_key='YOUR API KEY')
 
 cnn_url = 'https://edition.cnn.com/business'
 cnn_extract_rules = {
@@ -47,13 +47,17 @@ def get_headlines(url, extract_rules):
     headlines = data["headlines"]
     return headlines
 
+last_crawl_time = None
+
 def run_crawling():
-    global cnn_headlines, nbc_headlines, yahoo_headlines
+    global cnn_headlines, nbc_headlines, yahoo_headlines, last_crawl_time
 
     with app.app_context():
         cnn_headlines = get_headlines(cnn_url, cnn_extract_rules)
         nbc_headlines = get_headlines(nbc_url, nbc_extract_rules)
         yahoo_headlines = get_headlines(yahoo_url, yahoo_extract_rules)
+
+    last_crawl_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 has_run_crawling_onstartup = False
 
@@ -66,8 +70,12 @@ def crawling_onstartup():
 
 @app.route('/')
 def display_news():
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return render_template('news.html', cnn_headlines=cnn_headlines, nbc_headlines=nbc_headlines, yahoo_headlines=yahoo_headlines, timestamp=timestamp)
+    global last_crawl_time
+
+    if last_crawl_time is None:
+        last_crawl_time = "No crawl has been scheduled yet."
+
+    return render_template('news.html', cnn_headlines=cnn_headlines, nbc_headlines=nbc_headlines, yahoo_headlines=yahoo_headlines, last_crawl_time=last_crawl_time)
 
 
 if __name__ == "__main__":
