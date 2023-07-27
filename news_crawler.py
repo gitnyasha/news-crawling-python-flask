@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from scrapingbee import ScrapingBeeClient
 from datetime import datetime
 from pytz import utc
@@ -54,6 +55,15 @@ def run_crawling():
         nbc_headlines = get_headlines(nbc_url, nbc_extract_rules)
         yahoo_headlines = get_headlines(yahoo_url, yahoo_extract_rules)
 
+has_run_crawling_onstartup = False
+
+@app.before_request
+def crawling_onstartup():
+    global has_run_crawling_onstartup
+    if not has_run_crawling_onstartup:
+        run_crawling()
+        has_run_crawling_onstartup = True
+
 @app.route('/')
 def display_news():
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -65,3 +75,4 @@ if __name__ == "__main__":
     scheduler.start()
 
     app.run()
+
